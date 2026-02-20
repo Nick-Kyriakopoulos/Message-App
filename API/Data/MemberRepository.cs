@@ -15,6 +15,7 @@ public class MemberRepository(AppDbContext context) : IMemberRepository
     {
         return await context.Members
             .Include(m => m.User) // Include User if needed for update operations
+            .Include(m => m.Photos) // Include Photos if needed for update operations
             .SingleOrDefaultAsync(m => m.Id == id);
     }
 
