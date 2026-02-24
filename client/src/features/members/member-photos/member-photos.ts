@@ -37,6 +37,9 @@ export class MemberPhotos implements OnInit {
         this.memberService.editMode.set(false);
         this.photos.update(photos => [...photos, photo]);
         this.loading.set(false);
+        if (!this.memberService.member()?.imageUrl) {
+          this.setMainLocalPhoto(photo);
+        }
       },
       error: error => {
         console.log('Error uploading Image: ', error);
@@ -48,18 +51,9 @@ export class MemberPhotos implements OnInit {
   setMainPhoto(photo: Photo) {
     this.memberService.setMainPhoto(photo).subscribe({
       next: () => {
-        const currentUser = this.accountService.currentUser();
-        if (currentUser) {
-          this.accountService.setCurrentUser({
-            ...currentUser,
-            imageUrl: photo.url  // ✅ update the imageUrl
-          } as User);
-          this.memberService.member.update(member => ({
-            ...member,
-            imageUrl: photo.url
-          }) as Member);
-        }
-      },
+        this.setMainLocalPhoto(photo);
+        
+      }
     });
   }
 
@@ -72,5 +66,19 @@ export class MemberPhotos implements OnInit {
         console.log('Error deleting photo: ', error);
       }
     });
+  }
+
+  private setMainLocalPhoto(photo: Photo) {
+    const currentUser = this.accountService.currentUser();
+        if (currentUser) {
+          this.accountService.setCurrentUser({
+            ...currentUser,
+            imageUrl: photo.url  // ✅ update the imageUrl
+          } as User);
+          this.memberService.member.update(member => ({
+            ...member,
+            imageUrl: photo.url
+          }) as Member);
+        }
   }
 }
