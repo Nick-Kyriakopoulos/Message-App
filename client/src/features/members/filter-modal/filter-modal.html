@@ -1,0 +1,56 @@
+<dialog #filterModal class="modal">
+  <div class="modal-box max-w-lg">
+    <h3 class="text-lg font-bold">Select filters</h3>
+        <div class="flex justify-between w-full items-center mt-6">
+            <div class="flex flex-col w-full gap-6">
+                <label class="flex justify-between items-center">
+                    <span class="font-semibold">Select gender:</span>
+                    <form class="filter">
+                        <input type="reset" value="x" class="btn btn-square">
+                        <input type="radio" class="btn" [(ngModel)]="memberParams().gender" aria-label="Male" name="gender" value="male">
+                        <input type="radio" class="btn" [(ngModel)]="memberParams().gender" aria-label="Female" name="gender" value="female">
+                    </form>
+                </label>
+                <label class="flex justify-between items-center">
+                    <span class="font-semibold">Select age</span>
+                    <div class="flex gap-3">
+                        <input 
+                            type="number" 
+                            class="input w-20" 
+                            [(ngModel)]="memberParams().minAge"      
+                            [min]="18" name="minAge" 
+                            (change)="onMinAgeChange()"
+                        >
+                        <input 
+                            type="number" 
+                            class="input w-20" 
+                            [(ngModel)]="memberParams().maxAge" 
+                            [min]="memberParams().minAge || 18" 
+                            name="maxAge"  
+                            (change)="onMaxAgeChange()"
+                        >
+                    </div>
+                </label>
+                <label class="flex justify-between items-center">
+                    <span class="font-semibold">Order by</span>
+                    <select [(ngModel)]="memberParams().orderBy" name="orderBy" class="select">
+                        <option disabled selected>Order By</option>                       
+                        <option value="created">Newest Members</option>
+                        <option value="lastActive">Last Active</option>
+                    </select>
+                </label>
+            </div>
+        </div>
+
+
+
+    <div class="modal-action">
+      <button (click)="submit()" class="btn btn-primary">Submit</button>
+    </div>
+  </div>
+
+  <form method="dialog" class="modal-backdrop">
+    <button (click)="close()">Close</button>
+  </form>
+
+</dialog>
